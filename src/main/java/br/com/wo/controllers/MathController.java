@@ -1,4 +1,4 @@
-package br.com.wo;
+package br.com.wo.controllers;
 
 import br.com.wo.exceptions.UnsupportedMathOperationException;
 import br.com.wo.model.MathCalc;
