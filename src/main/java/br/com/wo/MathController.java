@@ -1,6 +1,7 @@
 package br.com.wo;
 
 import br.com.wo.exceptions.UnsupportedMathOperationException;
+import br.com.wo.model.MathCalc;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,21 +19,17 @@ public class MathController {
             @PathVariable(value = "numberOne") String numberOne,
             @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return convertToDouble(numberOne) + convertToDouble(numberTwo);
+        MathCalc.validationNumber(numberOne, numberTwo);
+        return MathCalc.sum(numberOne, numberTwo);
     }
 
     @RequestMapping(value = "/sub/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double subtract(
+    public Double subtraction(
             @PathVariable(value = "numberOne") String numberOne,
             @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+        MathCalc.validationNumber(numberOne, numberTwo);
+        return MathCalc.subtraction(numberOne, numberTwo);
     }
 
     @RequestMapping(value = "/mult/{numberOne}/{numberTwo}", method = RequestMethod.GET)
@@ -40,10 +37,8 @@ public class MathController {
             @PathVariable(value = "numberOne") String numberOne,
             @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return convertToDouble(numberOne) * convertToDouble(numberTwo);
+        MathCalc.validationNumber(numberOne, numberTwo);
+        return MathCalc.multiplication(numberOne, numberTwo);
     }
 
     @RequestMapping(value = "/div/{numberOne}/{numberTwo}", method = RequestMethod.GET)
@@ -51,10 +46,8 @@ public class MathController {
             @PathVariable(value = "numberOne") String numberOne,
             @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return convertToDouble(numberOne) / convertToDouble(numberTwo);
+        MathCalc.validationNumber(numberOne, numberTwo);
+        return MathCalc.division(numberOne, numberTwo);
     }
 
     @RequestMapping(value = "/ave/{numberOne}/{numberTwo}", method = RequestMethod.GET)
@@ -62,32 +55,16 @@ public class MathController {
             @PathVariable(value = "numberOne") String numberOne,
             @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return (convertToDouble(numberOne) + convertToDouble(numberTwo)) / 2.0;
+        MathCalc.validationNumber(numberOne, numberTwo);
+        return MathCalc.average(numberOne, numberTwo);
     }
 
     @RequestMapping(value = "/raizQuad/{number}", method = RequestMethod.GET)
     public Double rootSqrt(
             @PathVariable(value = "number") String number) throws Exception {
 
-        if (!isNumeric(number)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return Math.sqrt(convertToDouble(number));
+        MathCalc.validationNumber(number);
+        return MathCalc.rootQuad(number);
     }
 
-    private Double convertToDouble(String strNumber) {
-        if (strNumber == null) return 0D;
-        String formatString = strNumber.replaceAll(",", ".");
-        if (isNumeric(formatString)) return Double.parseDouble(formatString);
-        return 0D;
-    }
-
-    private boolean isNumeric(String strNumber) {
-        if (strNumber == null) return false;
-        String formatString = strNumber.replaceAll(",", ".");
-        return formatString.matches("[-+]?[0-9]*\\.?[0-9]+");
-    }
 }
